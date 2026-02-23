@@ -12,11 +12,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and package app
-        run: make app
+      - name: Build app and DMG
+        run: make dmg
 
       - name: Upload app bundle
         uses: actions/upload-artifact@v4
         with:
-          name: ScrcpyConnect
+          name: ScrcpyConnect.app
           path: ScrcpyConnect.app/
+
+      - name: Upload DMG installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ScrcpyConnect.dmg
+          path: ScrcpyConnect.dmg

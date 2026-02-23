@@ -1,5 +1,7 @@
 APP_NAME    := ScrcpyConnect
 APP_DIR     := $(APP_NAME).app
+DMG_FILE    := $(APP_NAME).dmg
+DMG_STAGE   := dmg-staging
 BINARY      := .build/release/$(APP_NAME)
 ICON_SRC    := AppIcon.png
 ICON_ICNS   := Resources/AppIcon.icns
@@ -7,7 +9,7 @@ ICONSET_DIR := Resources/AppIcon.iconset
 
 ICON_SIZES := 16 32 64 128 256 512 1024
 
-.PHONY: all build app icon clean run
+.PHONY: all build app dmg icon clean run
 
 all: app
 
@@ -46,9 +48,19 @@ app: $(BINARY) $(ICON_ICNS)
 	cp $(ICON_ICNS) $(APP_DIR)/Contents/Resources/
 	@echo "Built: $(APP_DIR)"
 
+# Create DMG installer with drag-to-Applications
+dmg: app
+	@rm -rf $(DMG_STAGE) $(DMG_FILE)
+	@mkdir -p $(DMG_STAGE)
+	cp -R $(APP_DIR) $(DMG_STAGE)/
+	ln -s /Applications $(DMG_STAGE)/Applications
+	hdiutil create $(DMG_FILE) -volname "$(APP_NAME)" -srcfolder $(DMG_STAGE) -ov -format UDZO
+	@rm -rf $(DMG_STAGE)
+	@echo "Created: $(DMG_FILE)"
+
 # Build and launch
 run: app
 	open $(APP_DIR)
 
 clean:
-	rm -rf .build $(APP_DIR) $(ICONSET_DIR)
+	rm -rf .build $(APP_DIR) $(DMG_FILE) $(DMG_STAGE) $(ICONSET_DIR)

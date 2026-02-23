@@ -6,8 +6,9 @@
 .swiftpm/
 Package.resolved
 
-# App bundle (built artifact)
+# Build artifacts
 ScrcpyConnect.app/
+*.dmg
 
 # Xcode (if opened via SPM)
 *.xcodeproj/
