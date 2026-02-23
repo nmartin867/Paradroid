@@ -12,11 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build release binary
-        run: swift build -c release
-
-      - name: Package app bundle
-        run: ./build.sh
+      - name: Build and package app
+        run: make app
 
       - name: Upload app bundle
         uses: actions/upload-artifact@v4
